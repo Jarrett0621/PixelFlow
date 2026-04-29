@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 
 namespace PixelFlow.Core
+
 {
     /// <summary>
     /// Composable pipeline for applying a sequence of filters.
