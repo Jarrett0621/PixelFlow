@@ -74,15 +74,16 @@ A naïve 2D Gaussian with radius `r` is O(n·(2r+1)²). Separability lets us do 
 
 ## Setup & Running
 
-### Prerequisites
-- Visual Studio 2022 or .NET 8 SDK
-- Windows (System.Drawing.Common uses GDI+ on Windows)
+
+- ### Prerequisites
+- .NET 8 SDK
+- SixLabors.ImageSharp (automatically restored via NuGet)
+- Works on Windows, macOS, and Linux
 
 ### Run the demo
 ```bash
 cd PixelFlow
-dotnet run --project PixelFlow.csproj           # synthetic test image
-dotnet run --project PixelFlow.csproj -- my.png # your own image
+dotnet run --property:StartupObject=PixelFlow.Program
 ```
 
 ### Run tests
