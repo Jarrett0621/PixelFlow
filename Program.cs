@@ -82,10 +82,45 @@ namespace PixelFlow
             var results = bench.RunAll(filters, sourceImage);
             foreach (var r in results)
                 Console.WriteLine($"  {r.Summary}");
-
             Console.WriteLine();
+
+            // ── Batch Processing: 100 images ─────────────────────────────
+            Console.WriteLine("📦 Batch Processing Demo (100 images)...");
+            var tempBatch = Path.Combine(outDir, "batch_input");
+            var batchOut  = Path.Combine(outDir, "batch_output");
+            Directory.CreateDirectory(tempBatch);
+            Directory.CreateDirectory(batchOut);
+
+            Console.WriteLine("  Generating 100 test images...");
+            var batchFiles = new List<string>();
+            for (int i = 0; i < 100; i++)
+            {
+                string f = Path.Combine(tempBatch, $"img_{i:D3}.png");
+                using var batchImg = GenerateTestImage(64, 64);
+                batchImg.SaveToFile(f);
+                batchFiles.Add(f);
+            }
+            Console.WriteLine("  Images generated. Starting batch...");
+
+            var batchPipeline = new FilterPipeline { Name = "BatchSepia" }
+                .Add(new SepiaFilter())
+                .Add(new ContrastFilter(1.3));
+
+            var processor = new BatchProcessor();
+            processor.ProgressChanged += (_, e) =>
+            {
+                if (e.Completed % 10 == 0 || e.IsComplete)
+                    Console.WriteLine($"  [{e.Completed}/{e.Total}] {e.Percentage:F0}% complete{(e.Error != null ? " ERROR: " + e.Error : "")}");
+            };
+
+            var batchSw = Stopwatch.StartNew();
+            await processor.ProcessAsync(batchFiles, batchOut, batchPipeline, maxConcurrency: 4);
+            batchSw.Stop();
+            Console.WriteLine($"  ✓ Batch complete — 100 images in {batchSw.ElapsedMilliseconds}ms → {batchOut}/");
+            Console.WriteLine();
+
             sourceImage.Dispose();
-            Console.WriteLine("✅ Done!");
+            Console.WriteLine("✅ All done!");
         }
 
         private static ImageData GenerateTestImage(int width, int height)
@@ -104,3 +139,4 @@ namespace PixelFlow
         }
     }
 }
+
