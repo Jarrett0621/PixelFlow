@@ -84,14 +84,45 @@ namespace PixelFlow
                 Console.WriteLine($"  {r.Summary}");
             Console.WriteLine();
 
-            // ── Batch Processing: 100 images ─────────────────────────────
-            Console.WriteLine("📦 Batch Processing Demo (100 images)...");
+            // ── Memory Profiling ─────────────────────────────────────────
+            Console.WriteLine("🧠 Memory Profiling...");
+            Console.WriteLine(new string('─', 60));
+
+            long baselineMemory = GC.GetTotalMemory(true);
+            Console.WriteLine($"  Baseline memory:        {baselineMemory / 1024,8} KB");
+
+            foreach (var filter in filters)
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                long before = GC.GetTotalMemory(true);
+                using var result = filter.ApplyParallel(sourceImage);
+                long after = GC.GetTotalMemory(false);
+                Console.WriteLine($"  {filter.Name,-35} → {(after - before) / 1024,6} KB allocated");
+            }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            long pipelineBefore = GC.GetTotalMemory(true);
+            using var pipelineMem = new FilterPipeline { Name = "MemTest" }
+                .Add(new GrayscaleFilter())
+                .Add(new SharpenFilter())
+                .Add(new BrightnessFilter(30))
+                .RunParallel(sourceImage);
+            long pipelineAfter = GC.GetTotalMemory(false);
+            Console.WriteLine($"  {"Pipeline (3 stages)",-35} → {(pipelineAfter - pipelineBefore) / 1024,6} KB allocated");
+            Console.WriteLine();
+
+            // ── Batch Processing ─────────────────────────────────────────
             var tempBatch = Path.Combine(outDir, "batch_input");
             var batchOut  = Path.Combine(outDir, "batch_output");
             Directory.CreateDirectory(tempBatch);
             Directory.CreateDirectory(batchOut);
 
-            Console.WriteLine("  Generating 100 test images...");
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            long batchBefore = GC.GetTotalMemory(true);
+
             var batchFiles = new List<string>();
             for (int i = 0; i < 100; i++)
             {
@@ -100,7 +131,6 @@ namespace PixelFlow
                 batchImg.SaveToFile(f);
                 batchFiles.Add(f);
             }
-            Console.WriteLine("  Images generated. Starting batch...");
 
             var batchPipeline = new FilterPipeline { Name = "BatchSepia" }
                 .Add(new SepiaFilter())
@@ -113,11 +143,18 @@ namespace PixelFlow
                     Console.WriteLine($"  [{e.Completed}/{e.Total}] {e.Percentage:F0}% complete{(e.Error != null ? " ERROR: " + e.Error : "")}");
             };
 
+            Console.WriteLine("📦 Batch Processing (100 images)...");
+            Console.WriteLine(new string('─', 60));
             var batchSw = Stopwatch.StartNew();
             await processor.ProcessAsync(batchFiles, batchOut, batchPipeline, maxConcurrency: 4);
             batchSw.Stop();
-            Console.WriteLine($"  ✓ Batch complete — 100 images in {batchSw.ElapsedMilliseconds}ms → {batchOut}/");
+            long batchAfter = GC.GetTotalMemory(false);
+            Console.WriteLine($"  ✓ Batch complete — 100 images in {batchSw.ElapsedMilliseconds}ms");
+            Console.WriteLine($"  Batch memory used:      {(batchAfter - batchBefore) / 1024,8} KB");
             Console.WriteLine();
+
+            // ── Edge Case Tests ───────────────────────────────────────────
+            EdgeCaseTests.RunAll();
 
             sourceImage.Dispose();
             Console.WriteLine("✅ All done!");
@@ -139,4 +176,3 @@ namespace PixelFlow
         }
     }
 }
-
