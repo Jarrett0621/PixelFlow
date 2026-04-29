@@ -11,9 +11,9 @@
 
 | Member | Responsibility | Files |
 |--------|---------------|-------|
-| **Member 1** | 8 Image Filters | `src/Filters.cs`, `src/IFilter.cs` |
-| **Member 2** | TPL / Parallel Processing | `src/FilterPipeline.cs`, `src/BatchProcessor.cs`, `src/Program.cs` |
-| **Member 3** | Analysis & Testing | `src/HistogramAnalyzer.cs`, `src/PerformanceBenchmark.cs`, `tests/FilterTests.cs`, `src/Benchmarks.cs` |
+| **Taylor** | 8 Image Filters | `src/Filters.cs`, `src/IFilter.cs` |
+| **Karma** | TPL / Parallel Processing | `src/FilterPipeline.cs`, `src/BatchProcessor.cs`, `src/Program.cs` |
+| **Jarrett** | Analysis & Testing | `src/HistogramAnalyzer.cs`, `src/PerformanceBenchmark.cs`, `tests/FilterTests.cs`, `src/Benchmarks.cs` |
 
 ---
 
