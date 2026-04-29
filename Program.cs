@@ -8,14 +8,14 @@ using PixelFlow.Core.Filters;
 
 namespace PixelFlow
 {
-    /// <summary>
+
     /// Console demo application for Team PixelFlow.
     /// Demonstrates: individual filters, pipelines, batch processing,
     /// histogram analysis, and sequential vs parallel benchmarking.
     ///
     /// Usage: dotnet run -- [image.png]
     /// If no image is provided, a synthetic test image is generated.
-    /// </summary>
+
     internal class Program
     {
         private static async Task Main(string[] args)
