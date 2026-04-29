@@ -5,10 +5,8 @@ using System.Runtime.InteropServices;
 
 namespace PixelFlow.Core
 {
-    /// <summary>
     /// High-performance image data wrapper with direct pixel buffer access.
     /// Avoids per-pixel GetPixel/SetPixel overhead by using unsafe bitmap pointers.
-    /// </summary>
     public sealed class ImageData : IDisposable
     {
         private readonly Bitmap _bitmap;
