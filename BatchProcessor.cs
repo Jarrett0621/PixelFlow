@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace PixelFlow.Core
 {
-    /// <summary>
+
     /// Processes multiple images through a filter pipeline concurrently.
     /// Uses Parallel.ForEachAsync (.NET 6+) for async-friendly parallelism.
     /// Progress is reported via IProgress<BatchProgress>.
-    /// </summary>
     public sealed class BatchProcessor
     {
         public event EventHandler<BatchProgress>? ProgressChanged;
 
-        /// <summary>
         /// Processes a list of input files and writes outputs to outputDir.
         /// Parallel at the file level — each image's pipeline also runs parallel.
-        /// </summary>
+
         public async Task ProcessAsync(
             IEnumerable<string> inputFiles,
             string outputDir,
