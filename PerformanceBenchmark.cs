@@ -5,11 +5,11 @@ using System.Threading;
 
 namespace PixelFlow.Core
 {
-    /// <summary>
+
     /// Measures sequential vs. parallel processing time and reports speedup.
     /// This is the lightweight in-app benchmark. For micro-benchmarks with
     /// statistical rigor, use BenchmarkDotNet in the PixelFlow.Benchmarks project.
-    /// </summary>
+
     public sealed class PerformanceBenchmark
     {
         private readonly int _warmupRuns;
@@ -21,10 +21,10 @@ namespace PixelFlow.Core
             _measuredRuns = measuredRuns;
         }
 
-        /// <summary>
+
         /// Runs a filter both sequentially and in parallel over the given image,
         /// returning a BenchmarkResult with timing statistics.
-        /// </summary>
+
         public BenchmarkResult Run(IFilter filter, ImageData image)
         {
             // Warmup — ensures JIT compilation doesn't skew first run
