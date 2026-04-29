@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 
 namespace PixelFlow.Core
 {
-    /// <summary>
+
     /// Computes per-channel histograms (R, G, B, Luminance) over an image.
     /// Parallel version uses thread-local arrays to avoid lock contention,
     /// then merges them at the end.
-    /// </summary>
     public sealed class HistogramAnalyzer
     {
         public int[] RedChannel   { get; private set; } = new int[256];
