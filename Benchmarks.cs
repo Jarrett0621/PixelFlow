@@ -5,11 +5,10 @@ using PixelFlow.Core.Filters;
 
 namespace PixelFlow.Benchmarks
 {
-    /// <summary>
     /// BenchmarkDotNet micro-benchmarks.
     /// Run with: dotnet run -c Release
     /// BenchmarkDotNet handles warmup, multiple iterations, and statistical analysis.
-    /// </summary>
+
     [MemoryDiagnoser]          // Reports allocations (Gen0/1/2, bytes allocated)
     [ThreadingDiagnoser]       // Reports thread contention
     [SimpleJob(launchCount: 1, warmupCount: 3, iterationCount: 10)]
