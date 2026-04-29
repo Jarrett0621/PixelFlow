@@ -6,11 +6,9 @@ using PixelFlow.Core.Filters;
 
 namespace PixelFlow.Tests
 {
-    /// <summary>
     /// Unit tests for all 8 filters, pipeline, histogram, and batch processor.
     /// Each test is self-contained: creates a synthetic image, applies a transformation,
     /// and verifies pixel values or structural properties.
-    /// </summary>
 
     // ─────────────────────────────────────────────────────────────────────────
     // Helper: creates a 10x10 image with a known color
@@ -27,7 +25,7 @@ namespace PixelFlow.Tests
             return img;
         }
 
-        /// <summary>Checkerboard: alternating black and white pixels.</summary>
+        //Checkerboard: alternating black and white pixels.
         public static ImageData Checkerboard(int size)
         {
             var img = new ImageData(size, size);
